@@ -6,5 +6,5 @@ services:
         #     CF_API_TOKEN:
         #     CF_ZONE_ID:
         #     CF_RECORD_NAME:
-        image: lstellway/ddn-cloudflare:1.0
+        image: lstellway/ddns-cloudflare:1.0
         restart: unless-stopped
