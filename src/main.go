@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/cloudflare/cloudflare-go"
 )
@@ -29,10 +30,21 @@ func main() {
 		return
 	}
 
+	// Create records
+	records := strings.Split(os.Getenv("CF_RECORD_NAME"), ",")
+	for _, r := range records {
+		setDnsRecord(api, strings.Trim(r, " "), ip)
+	}
+}
+
+/**
+ * Point A record to IP address
+ */
+func setDnsRecord(api *cloudflare.API, r string, ip string) {
 	// Initialize DNS record
 	record := cloudflare.DNSRecord{
 		Type: "A",
-		Name: os.Getenv("CF_RECORD_NAME"),
+		Name: r,
 	}
 
 	// Search for existing DNS record
