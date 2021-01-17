@@ -65,7 +65,7 @@ func setDnsRecord(api *cloudflare.API, r string, ip string) {
 		// Create new record
 		record.Content = ip
 		record.Proxiable = true
-		record.Proxied = false
+		record.Proxied = true
 
 		_, err := api.CreateDNSRecord(os.Getenv("CF_ZONE_ID"), record)
 		reportResult("create", err)
