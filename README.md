@@ -14,4 +14,4 @@ This is meant to be used in tandem with the [IPInfo server](https://github.com/l
 -   `DDNS_URL` - URL to IP info API (eg. [IPInfo server](https://github.com/loganstellway/ipinfo))
 -   `CF_API_TOKEN` - CloudFlare API token
 -   `CF_ZONE_ID` - CloudFlare zone ID
--   `CF_RECORD_NAME` - CloudFlare record name (eg. `subdomain.example.com`)
+-   `CF_RECORD_NAME` - Comma-separated list of record names (eg. `subdomain.example.com,subdomain1.example.com`)
