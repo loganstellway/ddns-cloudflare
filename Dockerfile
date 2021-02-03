@@ -1,14 +1,28 @@
-ARG GO_VERSION="1.15.6"
-FROM golang:${GO_VERSION}-alpine
+#########
+# BUILD #
+#########
+ARG GO_VERSION="1.15.7"
+ARG ALPINE_VERSION="3.13.1"
+FROM golang:${GO_VERSION}-alpine as build
 
-# Default to run cron every 4 hours
-ENV CRON_SCHEDULE="0   */3   *   *   *"
-ENV API_PORT=8080
-WORKDIR /go/src/app
-COPY ./src/ /go/src/app/
+WORKDIR /go
+COPY ./src /go/appsrc
 RUN apk add --no-cache git \
     && go get github.com/cloudflare/cloudflare-go \
-    && go build -o app ./* \
-    && (crontab -u $(whoami) -l; echo "$CRON_SCHEDULE   /go/src/app/app") | crontab -u $(whoami) -
+    && go build -o app ./appsrc/*
 
+#######
+# RUN #
+#######
+FROM alpine:${ALPINE_VERSION}
+
+COPY --from=build /go/app /app
+
+RUN adduser -u 1000 -H -D app \
+    && chown 1000:1000 /app \
+    && mkdir -p /etc/crontab/ \
+    && echo "*/15   *   *   *   *   /app" > /etc/crontab/app \
+    && chown 1000:1000 /etc/crontab/app
+
+USER app
 ENTRYPOINT [ "crond", "-f" ]
