@@ -18,11 +18,7 @@ FROM alpine:${ALPINE_VERSION}
 
 COPY --from=build /go/app /app
 
-RUN adduser -u 1000 -H -D app \
-    && chown 1000:1000 /app \
-    && mkdir -p /etc/crontabs/ \
-    && echo "*/15   *   *   *   *   /app" > /etc/crontabs/app \
-    && chown 1000:1000 /etc/crontabs/app
+RUN mkdir -p /etc/crontabs/ \
+    && echo "*/15   *   *   *   *   /app" > /etc/crontabs/root
 
-USER app
 ENTRYPOINT [ "crond", "-f" ]
