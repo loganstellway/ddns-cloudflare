@@ -20,9 +20,9 @@ COPY --from=build /go/app /app
 
 RUN adduser -u 1000 -H -D app \
     && chown 1000:1000 /app \
-    && mkdir -p /etc/crontab/ \
-    && echo "*/15   *   *   *   *   /app" > /etc/crontab/app \
-    && chown 1000:1000 /etc/crontab/app
+    && mkdir -p /etc/crontabs/ \
+    && echo "*/15   *   *   *   *   /app" > /etc/crontabs/app \
+    && chown 1000:1000 /etc/crontabs/app
 
 USER app
 ENTRYPOINT [ "crond", "-f" ]
